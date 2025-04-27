@@ -1,0 +1,3 @@
+D:/porjet_badland_test/cmake-build-debug/CMakeFiles/porjet_badland.dir
+D:/porjet_badland_test/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/porjet_badland_test/cmake-build-debug/CMakeFiles/rebuild_cache.dir

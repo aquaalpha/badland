@@ -1,0 +1,71 @@
+{
+	"kind" : "toolchains",
+	"toolchains" : 
+	[
+		{
+			"compiler" : 
+			{
+				"id" : "GNU",
+				"implicit" : 
+				{
+					"includeDirectories" : 
+					[
+						"D:/porjet_badland_test/MinGW/lib/gcc/mingw32/6.3.0/include",
+						"D:/porjet_badland_test/MinGW/include",
+						"D:/porjet_badland_test/MinGW/lib/gcc/mingw32/6.3.0/include-fixed",
+						"D:/porjet_badland_test/MinGW/mingw32/include"
+					],
+					"linkDirectories" : 
+					[
+						"D:/porjet_badland_test/MinGW/lib/gcc/mingw32/6.3.0",
+						"D:/porjet_badland_test/MinGW/lib/gcc",
+						"D:/porjet_badland_test/MinGW/mingw32/lib",
+						"D:/porjet_badland_test/MinGW/lib"
+					],
+					"linkFrameworkDirectories" : [],
+					"linkLibraries" : 
+					[
+						"mingw32",
+						"gcc",
+						"moldname",
+						"mingwex",
+						"advapi32",
+						"shell32",
+						"user32",
+						"kernel32",
+						"mingw32",
+						"gcc",
+						"moldname",
+						"mingwex"
+					]
+				},
+				"path" : "D:/porjet_badland_test/MinGW/bin/gcc.exe",
+				"version" : "6.3.0"
+			},
+			"language" : "C",
+			"sourceFileExtensions" : 
+			[
+				"c",
+				"m"
+			]
+		},
+		{
+			"compiler" : 
+			{
+				"implicit" : {},
+				"path" : "D:/porjet_badland_test/MinGW/bin/windres.exe"
+			},
+			"language" : "RC",
+			"sourceFileExtensions" : 
+			[
+				"rc",
+				"RC"
+			]
+		}
+	],
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 0
+	}
+}
