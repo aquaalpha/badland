@@ -86,9 +86,10 @@ void gerer_saut_et_mouvement(int *message_dic, t_pro *objet, bool *saut, float *
         }
 
         if (*saut) {
+            *imgcourante = 4;
             objet[0].y += *vitesse_y;
             *vitesse_y += 0.5;
-            gerer_animation_saut(objet[0], imgsaut, imgcourante, cptimg, tmpimg, fond_dic);
+            gerer_animation_perso_jeux(objet[0], img, imgcourante, cptimg, tmpimg, fond_dic, (int)scroll_x);
 
             if (colisition(objet[0], fond_dic, &y)) {
                 *saut = false;

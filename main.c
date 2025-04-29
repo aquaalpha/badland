@@ -270,7 +270,7 @@ int main() {
         }*/
         if (gameplay) {
             afficher_canon(&canon_active, fond_dic2, fond_dic, imgcanon, &imgcourante_canon, &cptimg_canon, tmpimg_canon, y_canon_ditactitielle);
-            masked_blit(mur_colision, fond_dic, 0, 0, 0, 0, fond_dic->w, fond_dic->h);
+            //masked_blit(mur_colision, fond_dic, 0, 0, 0, 0, fond_dic->w, fond_dic->h);
             masked_blit(mur, fond_dic, 0, 0, 0, 0, fond_dic->w, fond_dic->h);
             blit(fond_dic, buffer, objet[0].x, 0,0, 0, fond_dic->w, fond_dic->h);
             gerer_mouvement_objet(&marche,&canon_active, &mouvement, &imgcourante_canon, &angle_propulsion, buffer, img, objet, &perso);
