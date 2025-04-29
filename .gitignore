@@ -7,5 +7,6 @@ cmake-build-debug/cmake_install.cmake
 cmake-build-debug/CMakeCache.txt
 cmake-build-debug/.ninja_deps
 cmake-build-debug/.ninja_log
-cmake-build-debug/projet_ing1_allegro_2025_ing1_allegro_2025_2_1.exe
+cmake-build-debug/porjet_badland.exe
+cmake-build-debug/Makefile
 .idea
