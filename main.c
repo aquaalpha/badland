@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <allegro.h>
 #include <stdbool.h>
+#include <math.h>
 #include "menu.h"
 #include "jeu.h"
+#include "ditactitielle.h"
 
 #define NIMAGE 9
 #define NYEUX 5
 #define NAILE 9
+#define NSAUT 4
 #define NCANON 5
 volatile int timer_yeux = 0;
 
@@ -20,12 +23,14 @@ int main() {
     BITMAP *avancement0;
     BITMAP *texte ;
     BITMAP *imgcanon[NCANON];
+    BITMAP *imgsaut[NSAUT];
     BITMAP *fond_dic;
     BITMAP *fond_dic2;
     BITMAP *mur, *mur_colision;
     int imgcourante = 0, cptimg = 0, tmpimg = 40;
     int imgcourante_yeux = 0, cptimg_yeux = 0, tmpimg_yeux = 60;
     int imgcourante_aile = 0, cptimg_aile = 0, tmpimg_aile = 20;
+    int imgcourante_saut = 0, cptimg_saut = 0;
     int angle_roue = 0;
 
     float t = 0.02f;
@@ -38,12 +43,13 @@ int main() {
     char nom[50] = "";
     char *nom_final;
     int touche = 0 ;
+    float vitesse_y = 0;
 
    int marge_scrol = 200;
 
 
     int x_canon_ditactitielle = -400,y_canon_ditactitielle= 100;
-    int imgcourante_canon = 0, cptimg_canon = 0, tmpimg_canon=100;
+    int imgcourante_canon = 0, cptimg_canon = 0, tmpimg_canon=80;
     int angle_propulsion = 1000;
     int message_dic = 0;
     bool canon_active = true;
@@ -58,6 +64,8 @@ int main() {
     bool gameplay = true;
     bool marche = false;
     bool mouvement = true;
+    bool saut = false;
+    bool espace_appuye = false;
     int existant = 1;
 
     t_perso p[3] = {{120, 550}, {216, 675},{216,200}};
@@ -67,6 +75,15 @@ int main() {
     t_pro objet[1] = {{0, 450}};
     t_ill ill[1] = {{800, 500}};
     t_personnage_jeux perso;
+
+
+
+    ///// coordonnées obstacle jeux ///////
+    t_obstacle obstacle[1] = {{1047, 350}};
+
+
+
+
     int i = 0;
 
     float test = 0;
@@ -82,6 +99,7 @@ int main() {
     charger_images_yeux(imgyeux);
     charger_images_aile(imgaile);
     charger_images_canon(imgcanon);
+    charger_images_saut(imgsaut);
 
     fond_menu = load_bitmap("fond_menu.bmp", NULL);
     mur = load_bitmap("fond_mur_aplatie.bmp", NULL);
@@ -250,151 +268,18 @@ int main() {
             blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
 
         }*/
-        /*if(gameplay) {
-            if(objet[0].x > 1200) {
-                test = objet[0].x- 1200;
-            }
-            blit(fond_dic, buffer, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
-            masked_blit(mur_colision, buffer, test, 0, 0, 0, SCREEN_W, SCREEN_H);
-            masked_blit(mur, buffer, test, 0, 0, 0, SCREEN_W, SCREEN_H);
-            if(canon_active == true) {
-                gerer_animation_canon(objet[0].x,y_canon_ditactitielle, imgcanon, &imgcourante_canon, &cptimg_canon, tmpimg_canon, buffer,&canon_active);
-            }
-            else {
-                rotate_sprite(buffer, imgcanon[1], objet[0].x, y_canon_ditactitielle, itofix(10));
-            }
-            if(canon_active == false && mouvement == true) {
-                imgcourante_canon = 0;
-                angle_propulsion += 100000;
-                rotate_sprite(buffer, img[4], objet[0].x,objet[0].y , angle_propulsion);
-                objet[0].x += 1;
-                if(objet[0].x > 500) {
-                    objet[0].y += 3;
-                }
-                if(getpixel(mur_colision, objet[0].x, objet[0].y+50) == makecol(0, 255, 100)) {
-                    printf("collison\n");
-                    marche = true;
-                    mouvement = false;
-                    objet[0].y-=200;
-                    perso.x = objet[0].x-100;
-                    perso.y = objet[0].y;
-
-                }
-                printf("collison\n");
-
-            }
-            if(marche == true) {
-                if(message_dic == 0) {
-                    tmpimg_aile = 50;
-                    gerer_animation_perso_ailes(&ill[0], imgaile, &imgcourante_aile, &cptimg_aile, tmpimg_aile, buffer,&t,offset,amplitude,frequence,scroll_x);
-                    int x = 150;
-                    int y = 200;
-                    int couleur_fond = makecol(255, 250, 240);
-                    int couleur_texte = makecol(0, 0, 0);
-                    int couleur_bordure = makecol(255, 255, 255);
-                    int largeur = 600;
-                    int hauteur = 40;
-                    rectfill(buffer, x, y, x + largeur, y + hauteur, couleur_fond);
-                    rect(buffer, x, y, x + largeur, y + hauteur, couleur_bordure);
-                    textprintf_ex(buffer, font, x + 10, y + 10, couleur_texte, -1,"Bienvenue dans le ditactitielle, appuie sur [e] pour passer mes messages");
-                    if(key[KEY_E]) {
-                        message_dic +=1;
-                    }
-                    draw_sprite(buffer, img[4], objet[0].x, objet[0].y);
-                }
-                if(message_dic == 1) {
-                    if(key[KEY_D]) {
-                        objet[0].x+=1;
-                        printf("%f\n",objet[0].x);
-                    }
-                    if(key[KEY_A]) {
-                        objet[0].x-=1;
-                    }
-                    if(!key[KEY_A] && !key[KEY_D] ) {
-                        imgcourante = 4;
-                    }
-                    gerer_animation_perso_jeux(perso, img, &imgcourante, &cptimg, tmpimg, buffer,scroll_x);
-
-                }
-
-            }
-
-
-            blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
-
-        }*/
-        if(gameplay) {
-            if(canon_active == true) {
-                blit(fond_dic2,fond_dic , 0, 0, 0, 0, fond_dic->w, fond_dic->h);
-                gerer_animation_canon(-600,y_canon_ditactitielle, imgcanon, &imgcourante_canon, &cptimg_canon, tmpimg_canon, fond_dic,&canon_active);
-            }
-            else {
-                blit(fond_dic2,fond_dic , 0, 0, 0, 0, fond_dic->w, fond_dic->h);
-                rotate_sprite(fond_dic, imgcanon[1], -600, y_canon_ditactitielle, itofix(10));
-            }
+        if (gameplay) {
+            afficher_canon(&canon_active, fond_dic2, fond_dic, imgcanon, &imgcourante_canon, &cptimg_canon, tmpimg_canon, y_canon_ditactitielle);
             masked_blit(mur_colision, fond_dic, 0, 0, 0, 0, fond_dic->w, fond_dic->h);
             masked_blit(mur, fond_dic, 0, 0, 0, 0, fond_dic->w, fond_dic->h);
             blit(fond_dic, buffer, objet[0].x, 0,0, 0, fond_dic->w, fond_dic->h);
-            if(canon_active == false && mouvement == true) {
-                imgcourante_canon = 0;
-                angle_propulsion += 100000;
-                rotate_sprite(buffer, img[4], objet[0].x,objet[0].y , angle_propulsion);
-                objet[0].x += 1;
-                if(objet[0].x > 355) {
-                    marche = true;
-                    mouvement = false;
-                    perso.x = objet[0].x;
-                    perso.y = objet[0].y;
-
-                }
-            }
-            if(marche == true) {
-                if(message_dic == 0) {
-                    tmpimg_aile = 50;
-                    gerer_animation_perso_ailes(&ill[0], imgaile, &imgcourante_aile, &cptimg_aile, tmpimg_aile, buffer,&t,offset,amplitude,frequence,scroll_x);
-                    int x = 150;
-                    int y = 200;
-                    int couleur_fond = makecol(255, 250, 240);
-                    int couleur_texte = makecol(0, 0, 0);
-                    int couleur_bordure = makecol(255, 255, 255);
-                    int largeur = 600;
-                    int hauteur = 40;
-                    rectfill(buffer, x, y, x + largeur, y + hauteur, couleur_fond);
-                    rect(buffer, x, y, x + largeur, y + hauteur, couleur_bordure);
-                    textprintf_ex(buffer, font, x + 10, y + 10, couleur_texte, -1,"Bienvenue dans le ditactitielle, appuie sur [e] pour passer mes messages");
-                    if(key[KEY_E]) {
-                        message_dic +=1;
-                    }
-                    draw_sprite(buffer, img[4], objet[0].x, objet[0].y);
-                }
-                if(message_dic == 1) {
-                    if(colisition(objet[0],mur_colision)) {
-                        objet[0].y-=1;
-
-                    }
-                    else if(!colisition(objet[0],mur_colision)) {
-                        objet[0].y+=1;
-
-                    }
-                    if(key[KEY_D]) {
-                        objet[0].x+=1;
-                        //printf("%f\n",objet[0].x);
-                    }
-                    if(key[KEY_A]) {
-                        objet[0].x-=1;
-                    }
-                    if(!key[KEY_A] && !key[KEY_D] ) {
-                        imgcourante = 4;
-                    }
-                    perso.y = objet[0].y;
-                    gerer_animation_perso_jeux(objet[0], img, &imgcourante, &cptimg, tmpimg, fond_dic,scroll_x);
-                    blit(fond_dic, buffer, objet[0].x, 0,0, 0, fond_dic->w, fond_dic->h);
-                    printf(" %f %f %d %d\n",objet[0].x,objet[0].y,mouse_y,mouse_x);
-                }
-            }
+            gerer_mouvement_objet(&marche,&canon_active, &mouvement, &imgcourante_canon, &angle_propulsion, buffer, img, objet, &perso);
+            afficher_message_ditactitielle(&marche, &message_dic, buffer, img, objet, ill, imgaile, &imgcourante_aile, &cptimg_aile, &t, offset, amplitude, frequence, scroll_x);
+            gerer_saut_et_mouvement(&message_dic, objet, &saut, &vitesse_y, &imgcourante_saut, &cptimg_saut, tmpimg, fond_dic, mur_colision, img, imgsaut, buffer,scroll_x);
             show_mouse(buffer);
             blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
         }
+
     }
 
     allegro_exit();
