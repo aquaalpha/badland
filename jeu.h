@@ -29,6 +29,6 @@ void gerer_animation_perso_jeux(t_pro p, BITMAP *img[], int *imgcourante, int *c
 bool colisition(t_pro perso,BITMAP* mur,int *y);
 bool colisition_devant(t_pro p,BITMAP *mur);
 void afficher_roue_jeux(BITMAP *roue, t_obstacle r, int *angle, BITMAP *fonds);
-void afficher_scie(BITMAP *scie,BITMAP *fonds,int *x,int y,t_pro *objet,int *angle);
+void afficher_scie(BITMAP *scie,BITMAP *scie_colision,BITMAP *fonds,BITMAP *mur_colision,int *x,int y,t_pro *objet,int *angle);
 void gerer_animation_saut(t_pro p,BITMAP *img[], int *imgcourante, int *cptimg, int tmpimg, BITMAP *buffer);
 #endif //JEU_H

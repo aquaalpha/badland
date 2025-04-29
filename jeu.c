@@ -122,17 +122,37 @@ bool colisition_devant(t_pro p,BITMAP *mur) {
 
 }
 
+bool colisition_mort(t_pro p,BITMAP *mur) {
+    int x = (int)p.x , y = (int)p.y + 254;
+    int startX = (int)p.x+60;
+    int endX = (int)p.x + 244;
+    int footY = (int)p.y+10;
+    int footENDY = (int)p.y+ 244;
+    int color = makecol(255, 0, 0);
+    for (int i = startX; i <= endX; i++) {
+        for (int j = footY; j <= footENDY; j++ ) {
+            if (getpixel(mur, i, j) == color) {
+                printf("colision\n");
+                return true;
+            }
+        }
+    }
+    return false;
+
+}
+
 
 void afficher_roue_jeux(BITMAP *roue, t_obstacle r, int *angle, BITMAP *fonds) {
     *angle += 1000;
     rotate_sprite(fonds, roue, r.x, r.y, *angle);
 }
 
-void afficher_scie(BITMAP *scie,BITMAP *fonds,int *x,int y,t_pro *objet, int *angle) {
+void afficher_scie(BITMAP *scie,BITMAP *scie_colision,BITMAP *fonds,BITMAP *mur_colision,int *x,int y,t_pro *objet, int *angle) {
     if(objet[0].x > 1800) {
         *angle += 10000;
         *x-=5;
         rotate_sprite(fonds, scie, *x, y, *angle);
+        rotate_sprite(mur_colision, scie_colision, *x, y, *angle);
     }
 }
 
