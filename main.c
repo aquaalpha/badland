@@ -27,11 +27,13 @@ int main() {
     BITMAP *fond_dic;
     BITMAP *fond_dic2;
     BITMAP *mur, *mur_colision;
+    BITMAP *scie,*scie_colision;
     int imgcourante = 0, cptimg = 0, tmpimg = 40;
     int imgcourante_yeux = 0, cptimg_yeux = 0, tmpimg_yeux = 60;
     int imgcourante_aile = 0, cptimg_aile = 0, tmpimg_aile = 20;
     int imgcourante_saut = 0, cptimg_saut = 0;
     int angle_roue = 0;
+    int x_scie = 3000, y_scie = 500;
 
     float t = 0.02f;
     float amplitude = 20.0f;
@@ -124,6 +126,8 @@ int main() {
     avancement0 = load_bitmap("avancement.bmp", NULL);
     fond_dic = load_bitmap("fonds_dic.bmp", NULL);
     fond_dic2 = load_bitmap("fonds_dic.bmp", NULL);
+    scie = load_bitmap("scie.bmp", NULL);
+    scie_colision = load_bitmap("scie_colision.bmp", NULL);
     buffer = create_bitmap(SCREEN_W, SCREEN_H);
 
     while (!key[KEY_ESC]) {
@@ -270,6 +274,7 @@ int main() {
         }*/
         if (gameplay) {
             afficher_canon(&canon_active, fond_dic2, fond_dic, imgcanon, &imgcourante_canon, &cptimg_canon, tmpimg_canon, y_canon_ditactitielle);
+            afficher_scie(scie,fond_dic,&x_scie,y_scie,objet,&angle_roue);
             //masked_blit(mur_colision, fond_dic, 0, 0, 0, 0, fond_dic->w, fond_dic->h);
             masked_blit(mur, fond_dic, 0, 0, 0, 0, fond_dic->w, fond_dic->h);
             blit(fond_dic, buffer, objet[0].x, 0,0, 0, fond_dic->w, fond_dic->h);

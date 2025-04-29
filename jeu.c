@@ -128,3 +128,11 @@ void afficher_roue_jeux(BITMAP *roue, t_obstacle r, int *angle, BITMAP *fonds) {
     rotate_sprite(fonds, roue, r.x, r.y, *angle);
 }
 
+void afficher_scie(BITMAP *scie,BITMAP *fonds,int *x,int y,t_pro *objet, int *angle) {
+    if(objet[0].x > 1800) {
+        *angle += 10000;
+        *x-=5;
+        rotate_sprite(fonds, scie, *x, y, *angle);
+    }
+}
+
